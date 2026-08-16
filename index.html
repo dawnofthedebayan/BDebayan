@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- Theme is resolved before first paint so there is no flash of the wrong
+     mode. Saved choice wins; otherwise follow the OS. -->
+<script>
+(function () {
+  var t;
+  try { t = localStorage.getItem('theme'); } catch (e) {}
+  if (t !== 'light' && t !== 'dark') {
+    t = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+  }
+  document.documentElement.setAttribute('data-theme', t);
+})();
+</script>
+<title>Debayan Bhattacharya — memory systems &amp; local inference</title>
+<meta name="description" content="I build memory systems and local-inference pipelines for personal AI, and lead AI/ML direction at Airbus. Obsidian plugins, tiered-memory agents, and models that never leave the laptop.">
+<meta name="author" content="Debayan Bhattacharya">
+<meta name="theme-color" content="#0A0C16" data-theme-color>
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="Debayan Bhattacharya — memory systems &amp; local inference">
+<meta property="og:description" content="Obsidian plugins, tiered-memory agents, and models that never leave the laptop.">
+<meta property="og:image" content="assets/hero/gaze-poster.jpg">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><circle cx='16' cy='16' r='7' fill='%2334E2C0'/><circle cx='16' cy='16' r='13' fill='none' stroke='%2334E2C0' stroke-opacity='.35'/></svg>">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- Space Grotesk is loaded as a variable font so light mode can use the
+     in-between weights (430 / 560) it needs to hold up against paper. -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Space+Grotesk:wght@400..700&display=swap">
+<link rel="stylesheet" href="assets/css/site.css">
+</head>
+
+<body>
+<a class="skip" href="#projects">Skip to projects</a>
+<canvas id="life-bg" aria-hidden="true"></canvas>
+
+<header class="nav">
+  <a class="nav-mark" href="#top">
+    <span class="dot" aria-hidden="true"></span>
+    <b>Debayan Bhattacharya</b><b class="short">DB</b><span class="long"> · Hamburg</span>
+  </a>
+  <nav class="nav-links" aria-label="Sections" data-nav>
+    <a href="#projects">projects</a>
+    <a href="#writing">writing</a>
+    <a href="#offclock"><span class="lbl-full">off the clock</span><span class="lbl-short">off-clock</span></a>
+    <a href="#contact">contact</a>
+
+    <button class="theme-toggle" type="button" data-theme-toggle
+            aria-label="Switch colour theme" title="Switch colour theme">
+      <span class="knob" aria-hidden="true">
+        <svg class="ico-moon" viewBox="0 0 24 24"><path d="M20.5 15A8.5 8.5 0 0 1 9 3.5 8.5 8.5 0 1 0 20.5 15z" stroke-linejoin="round"/></svg>
+        <svg class="ico-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.4"/><path d="M12 1.5v2.6M12 19.9v2.6M4.4 4.4l1.9 1.9M17.7 17.7l1.9 1.9M1.5 12h2.6M19.9 12h2.6M4.4 19.6l1.9-1.9M17.7 6.3l1.9-1.9" stroke-linecap="round"/></svg>
+      </span>
+    </button>
+  </nav>
+</header>
+
+<main class="page" id="top">
+
+  <!-- ================================================================ HERO -->
+  <section class="hero">
+    <div class="wrap hero-grid">
+
+      <div class="hero-copy">
+        <span class="eyebrow"><i aria-hidden="true"></i> <span data-bind="hero.eyebrow"></span></span>
+
+        <h1>
+          <span class="lo" data-bind="hero.headlineLead"></span>
+          <span class="hi" data-bind="hero.headlineAccent"></span>
+        </h1>
+
+        <p class="hero-sub" data-bind="identity.bio"></p>
+        <p class="hero-sub" data-bind="identity.sub"></p>
+
+        <div class="hero-cta">
+          <a class="btn btn-primary" href="#projects"><span data-bind="hero.ctaPrimary"></span> <span class="arw" aria-hidden="true">→</span></a>
+          <a class="btn" href="#writing" data-bind="hero.ctaSecondary"></a>
+          <a class="btn" href="#contact" data-egg><span data-bind="hero.ctaContact"></span> <span class="arw" aria-hidden="true">→</span></a>
+        </div>
+
+        <div class="hero-meta" data-hero-facts></div>
+      </div>
+
+      <div class="hero-node">
+        <div class="rootnode">
+          <div class="rootnode-inner">
+            <svg class="rootnode-edges" aria-hidden="true"></svg>
+            <div class="orbit o2 orbit-spin-rev" aria-hidden="true"></div>
+            <div class="orbit orbit-spin" aria-hidden="true"></div>
+            <div class="orbit o3" aria-hidden="true"></div>
+            <!-- The resting pose ships in the markup so there is something to
+                 look at before hero.js runs, and something left if it never
+                 does. hero.js stacks the sprite canvas on top of it. -->
+            <div class="photo-well">
+              <img class="well-img is-on" src="assets/hero/gaze-poster.webp"
+                   alt="Debayan Bhattacharya" width="320" height="320"
+                   fetchpriority="high" decoding="async" draggable="false">
+            </div>
+          </div>
+          <span class="hero-hint" data-bind="hero.hint">move your cursor</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============================================================ PROJECTS -->
+  <section class="section" id="projects" data-section="projects">
+    <div class="wrap">
+      <div class="section-head rv">
+        <div class="section-label" data-sec-label></div>
+        <h2 data-sec-title></h2>
+        <p data-sec-intro></p>
+      </div>
+
+      <div class="pgraph">
+        <svg class="pedges" aria-hidden="true" preserveAspectRatio="none"></svg>
+        <div class="pcards"></div>
+      </div>
+
+      <div class="notebook rv">
+        <h3 data-bind="notebookTitle"></h3>
+        <p data-bind="notebookIntro"></p>
+        <div class="nb-list"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================= WRITING -->
+  <section class="section" id="writing" data-section="writing">
+    <div class="wrap">
+      <div class="section-head rv">
+        <div class="section-label" data-sec-label></div>
+        <h2 data-sec-title></h2>
+        <p data-sec-intro></p>
+      </div>
+
+      <div class="posts"></div>
+
+      <div class="series rv">
+        <div class="series-head">
+          <h3>Building My Second Brain — the series</h3>
+          <span>and other posts</span>
+        </div>
+        <ol></ol>
+        <div style="margin-top:22px">
+          <a class="btn" data-href="substack" target="_blank" rel="noopener">
+            All posts on Substack <span class="arw" aria-hidden="true">↗</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================== OFF CLOCK -->
+  <section class="section" id="offclock" data-section="offclock">
+    <div class="wrap">
+      <div class="section-head rv">
+        <div class="section-label" data-sec-label></div>
+        <h2 data-sec-title></h2>
+        <p data-sec-intro></p>
+      </div>
+    </div>
+
+    <div class="oc rv">
+      <div class="wrap">
+        <div class="oc-bar">
+          <div class="oc-navs">
+            <button class="oc-nav" data-oc-prev type="button" aria-label="Scroll carousel left">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <button class="oc-nav" data-oc-next type="button" aria-label="Scroll carousel right">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+          </div>
+          <div class="oc-rail" aria-hidden="true"><span></span></div>
+          <div class="oc-count" data-oc-count></div>
+        </div>
+      </div>
+
+      <div class="oc-track" role="list" aria-label="Off the clock"></div>
+
+      <div class="wrap">
+        <div class="oc-drawer" id="oc-drawer"><div><div class="oc-drawer-in"></div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================= CONTACT -->
+  <section class="section contact" id="contact" data-section="contact">
+    <div class="wrap">
+      <div class="rv">
+        <div class="section-label" style="justify-content:center" data-sec-label></div>
+        <h2 data-sec-title></h2>
+        <p data-sec-intro></p>
+        <div class="contact-links">
+          <a class="btn btn-primary" data-href="email">Email <span class="arw" aria-hidden="true">→</span></a>
+          <a class="btn" data-href="github" target="_blank" rel="noopener">GitHub <span class="arw" aria-hidden="true">↗</span></a>
+          <a class="btn" data-href="substack" target="_blank" rel="noopener">Substack <span class="arw" aria-hidden="true">↗</span></a>
+          <a class="btn" data-href="linkedin" target="_blank" rel="noopener">LinkedIn <span class="arw" aria-hidden="true">↗</span></a>
+          <a class="btn" data-href="scholar" target="_blank" rel="noopener">Scholar <span class="arw" aria-hidden="true">↗</span></a>
+        </div>
+      </div>
+
+      <div class="foot">
+        <span>© <span data-year></span> Debayan Bhattacharya — Hamburg</span>
+        <span></span>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<script src="assets/js/content.js"></script>
+<!-- Generated by tools/bake_hero.py — describes the head-rotation sprite
+     sheet (grid shape, cell size, which angle cell 0 holds). A plain script
+     rather than a fetch of gaze.json so file:// preview keeps working. -->
+<script src="assets/hero/gaze.js"></script>
+<script src="assets/js/life.js" defer></script>
+<script src="assets/js/app.js" defer></script>
+<script src="assets/js/hero.js" defer></script>
+<script src="assets/js/offclock.js" defer></script>
+<script src="assets/js/analytics.js" defer></script>
+</body>
+</html>

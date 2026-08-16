@@ -1,0 +1,121 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 640" width="1000" height="640" role="img" aria-labelledby="t d">
+<title id="t">Vault LLM architecture</title>
+<desc id="d">Notes are parsed and embedded locally, written into a three-tier memory of core, semantic and episodic stores, then retrieved into a context assembler that feeds a local mlx_lm model, which powers chat, backlink suggestions, auto-tagging, contradiction detection and map-of-content generation, and writes results back into memory.</desc>
+
+<defs>
+  <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+    <path d="M0,0 L10,5 L0,10 z" fill="#097266"/>
+  </marker>
+  <marker id="arA" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+    <path d="M0,0 L10,5 L0,10 z" fill="#A65E0B"/>
+  </marker>
+  <style>
+    .bx { fill:#F7F9FE; stroke:#D6DDEE; stroke-width:1.2; }
+    .bx-a { fill:#EEF9F6; stroke:rgba(9,114,102,.40); stroke-width:1.2; }
+    .bx-m { fill:#F2F1FD; stroke:rgba(79,64,196,.40); stroke-width:1.2; }
+    .ttl { fill:#0E1322; font-family:'Space Grotesk',system-ui,sans-serif; font-size:15px; font-weight:530; }
+    .ttl-s { fill:#0E1322; font-family:'Space Grotesk',system-ui,sans-serif; font-size:14px; font-weight:530; }
+    .sub { fill:#57627E; font-family:ui-monospace,'SF Mono',Menlo,monospace; font-size:10.5px; }
+    .lbl { fill:#097266; font-family:ui-monospace,'SF Mono',Menlo,monospace; font-size:10px; letter-spacing:.14em; }
+    .lblA { fill:#A65E0B; font-family:ui-monospace,'SF Mono',Menlo,monospace; font-size:10px; letter-spacing:.1em; }
+    .ed { stroke:#097266; stroke-opacity:.62; stroke-width:1.3; fill:none; }
+    .edA { stroke:#A65E0B; stroke-opacity:.68; stroke-width:1.3; fill:none; stroke-dasharray:5 4; }
+  </style>
+</defs>
+
+<rect width="1000" height="640" rx="12" fill="#FFFFFF" stroke="#E3E8F4"/>
+
+<!-- ============================ ROW A : ingest ============================ -->
+<text class="lbl" x="50" y="46">INGEST — ALL LOCAL</text>
+
+<g>
+  <rect class="bx" x="50"  y="62" width="195" height="66" rx="10"/>
+  <text class="ttl-s" x="68" y="92">Obsidian vault</text>
+  <text class="sub"   x="68" y="112">markdown notes</text>
+
+  <rect class="bx" x="285" y="62" width="195" height="66" rx="10"/>
+  <text class="ttl-s" x="303" y="92">Parse + chunk</text>
+  <text class="sub"   x="303" y="112">TypeScript plugin</text>
+
+  <rect class="bx" x="520" y="62" width="195" height="66" rx="10"/>
+  <text class="ttl-s" x="538" y="92">Embeddings</text>
+  <text class="sub"   x="538" y="112">Ollama · nomic-embed-text</text>
+
+  <rect class="bx" x="755" y="62" width="195" height="66" rx="10"/>
+  <text class="ttl-s" x="773" y="92">Vector index</text>
+  <text class="sub"   x="773" y="112">on disk, never leaves</text>
+</g>
+
+<path class="ed" d="M245,95 H279" marker-end="url(#ar)"/>
+<path class="ed" d="M480,95 H514" marker-end="url(#ar)"/>
+<path class="ed" d="M715,95 H749" marker-end="url(#ar)"/>
+
+<!-- routed down into the memory container -->
+<path class="ed" d="M852,128 V152 Q852,164 840,164 H512 Q500,164 500,176 V192" marker-end="url(#ar)"/>
+
+<!-- ========================= ROW B : three-tier memory ==================== -->
+<rect x="50" y="196" width="900" height="164" rx="14" fill="rgba(9,114,102,.05)" stroke="rgba(52,78,140,.26)" stroke-width="1.1" stroke-dasharray="6 5"/>
+<text class="lbl" x="72" y="222">THREE-TIER MEMORY — MemGPT-STYLE</text>
+
+<rect class="bx-a" x="80"  y="238" width="236" height="98" rx="10"/>
+<text class="ttl" x="100" y="272">Core</text>
+<text class="sub" x="100" y="294">durable facts about me</text>
+<text class="sub" x="100" y="312">always in context</text>
+
+<rect class="bx-a" x="382" y="238" width="236" height="98" rx="10"/>
+<text class="ttl" x="402" y="272">Semantic</text>
+<text class="sub" x="402" y="294">knowledge distilled from notes</text>
+<text class="sub" x="402" y="312">retrieved by similarity</text>
+
+<rect class="bx-a" x="684" y="238" width="236" height="98" rx="10"/>
+<text class="ttl" x="704" y="272">Episodic</text>
+<text class="sub" x="704" y="294">dated events, what happened</text>
+<text class="sub" x="704" y="312">recency + relevance</text>
+
+<!-- tiers into the assembler -->
+<path class="ed" d="M198,336 V372 Q198,384 210,384 H318 Q330,384 330,396 V412" marker-end="url(#ar)"/>
+<path class="ed" d="M500,336 V412" marker-end="url(#ar)"/>
+<path class="ed" d="M802,336 V372 Q802,384 790,384 H682 Q670,384 670,396 V412" marker-end="url(#ar)"/>
+
+<!-- ===================== ROW C : assembly + inference ===================== -->
+<rect class="bx" x="190" y="416" width="280" height="66" rx="10"/>
+<text class="ttl-s" x="210" y="446">Retrieval + context assembly</text>
+<text class="sub"   x="210" y="466">tier-aware budget, citations kept</text>
+
+<rect class="bx-m" x="530" y="416" width="280" height="66" rx="10"/>
+<text class="ttl-s" x="550" y="446">mlx_lm — local inference</text>
+<text class="sub"   x="550" y="466">Apple Silicon, no network call</text>
+
+<path class="ed" d="M470,449 H524" marker-end="url(#ar)"/>
+
+<!-- writes back into memory -->
+<path class="edA" d="M810,438 H948 Q964,438 964,422 V300 Q964,286 948,286 H926" marker-end="url(#arA)"/>
+<text class="lblA" x="836" y="404">writes back</text>
+
+<!-- ============================ ROW D : features ========================== -->
+<path class="ed" d="M670,482 V506"/>
+<path class="ed" d="M110,506 H890" stroke-dasharray="0"/>
+<path class="ed" d="M110,506 V536" marker-end="url(#ar)"/>
+<path class="ed" d="M280,506 V536" marker-end="url(#ar)"/>
+<path class="ed" d="M465,506 V536" marker-end="url(#ar)"/>
+<path class="ed" d="M660,506 V536" marker-end="url(#ar)"/>
+<path class="ed" d="M865,506 V536" marker-end="url(#ar)"/>
+
+<g>
+  <rect class="bx" x="50"  y="540" width="120" height="46" rx="23"/>
+  <text class="sub" x="110" y="568" text-anchor="middle" fill="#39445E">RAG chat</text>
+
+  <rect class="bx" x="180" y="540" width="200" height="46" rx="23"/>
+  <text class="sub" x="280" y="568" text-anchor="middle" fill="#39445E">backlink suggestions</text>
+
+  <rect class="bx" x="390" y="540" width="150" height="46" rx="23"/>
+  <text class="sub" x="465" y="568" text-anchor="middle" fill="#39445E">auto-tagging</text>
+
+  <rect class="bx" x="550" y="540" width="220" height="46" rx="23"/>
+  <text class="sub" x="660" y="568" text-anchor="middle" fill="#39445E">contradiction detection</text>
+
+  <rect class="bx" x="780" y="540" width="170" height="46" rx="23"/>
+  <text class="sub" x="865" y="568" text-anchor="middle" fill="#39445E">MOC generation</text>
+</g>
+
+</svg>

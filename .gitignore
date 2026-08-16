@@ -1,0 +1,20 @@
+# The local content manager. Tooling, not site — never pushed.
+cms/
+
+# The head-rotation shoot: 580 x 1080px PNGs, ~404 MB. Source material for
+# tools/bake_hero.py, never deployed. What ships is assets/hero/*.webp (~560 KB).
+# The whole directory is source now — nothing in the site references photos/.
+photos/
+
+# Scratch folder for files staged for deletion by the desktop bridge
+_to_delete/
+
+# OS and editor noise
+.DS_Store
+Thumbs.db
+*.swp
+.vscode/
+.idea/
+
+node_modules/
+npm-debug.log*

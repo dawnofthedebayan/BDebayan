@@ -1,0 +1,104 @@
+# Deploys the site to GitHub Pages on every push to the default branch.
+#
+# ONE-TIME SETUP, or nothing happens:
+#   Settings → Pages → Build and deployment → Source → "GitHub Actions"
+#   (NOT "Deploy from a branch" — that path ignores this workflow entirely.)
+#
+# Using a custom workflow also removes the 10-builds-per-hour limit that
+# applies to the classic Pages build.
+#
+# photos/ is gitignored — the 580-frame shoot is source material for
+# tools/bake_hero.py. What deploys is assets/hero/*.webp, ~560 KB.
+
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main, master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Never let two deploys race. Queued runs collapse to the newest; a run
+# already in flight is allowed to finish rather than being cancelled.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Check content.js parses
+        # content.js is machine-written by the CMS. If a bad edit lands, fail
+        # here with a clear message instead of shipping a blank page.
+        run: |
+          node -e '
+            const fs = require("fs"), vm = require("vm");
+            const ctx = { window: {} };
+            vm.createContext(ctx);
+            vm.runInContext(fs.readFileSync("assets/js/content.js", "utf8"), ctx);
+            const S = ctx.window.SITE;
+            if (!S) throw new Error("content.js did not set window.SITE");
+            for (const k of ["identity", "sections", "projects"]) {
+              if (!S[k]) throw new Error("content.js is missing " + k);
+            }
+            console.log(
+              "content ok — " + S.sections.length + " sections, " +
+              S.projects.length + " projects, " +
+              (S.writing?.posts?.length ?? 0) + " posts, " +
+              (S.offclock?.items?.length ?? 0) + " off-the-clock items"
+            );
+          '
+
+      - name: Check the baked hero assets are present
+        # The hero loads these, not photos/. If a bake was never committed the
+        # site deploys with no face on it — fail loudly instead.
+        run: |
+          missing=0
+          for f in assets/hero/gaze.json assets/hero/gaze.js \
+                   assets/hero/gaze-72.webp assets/hero/gaze-36.webp \
+                   assets/hero/gaze-poster.webp assets/hero/gaze-poster.jpg \
+                   assets/hero/egg.webp; do
+            if [ ! -f "$f" ]; then echo "::error::missing hero asset $f"; missing=1; fi
+          done
+          if [ "$missing" = "1" ]; then
+            echo "Run tools/bake_hero.py and commit assets/hero/ before deploying."
+            exit 1
+          fi
+          echo "hero assets ok — $(du -sh assets/hero | cut -f1) total"
+
+      - name: Report deploy size
+        # Pages refuses to serve sites over 1 GB. Surface the number so a
+        # large binary landing in the repo is obvious in the log.
+        run: |
+          BYTES=$(du -sb . --exclude=.git | cut -f1)
+          echo "artifact size: $(numfmt --to=iec "$BYTES")  (GitHub Pages limit: 1 GB)"
+          if [ "$BYTES" -gt 900000000 ]; then
+            echo "::error::artifact is close to the 1 GB Pages limit"
+            exit 1
+          fi
+          if [ "$BYTES" -gt 200000000 ]; then
+            echo "::warning::artifact is unexpectedly large — did source material get committed?"
+          fi
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.'
+
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v5
