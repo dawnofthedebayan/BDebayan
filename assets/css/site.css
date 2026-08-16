@@ -519,9 +519,6 @@ body::before {
   position: absolute; inset: 17%;
   border-radius: 50%;
   overflow: hidden;
-  /* isolate creates a stacking context, which keeps the composited canvas
-     inside this element rather than being promoted past its clip */
-  isolation: isolate;
   background: var(--well-bg);
   border: 1px solid var(--phos-edge);
   box-shadow: var(--well-shadow);
@@ -558,6 +555,9 @@ body::before {
 .photo-well::after {
   content: ''; position: absolute; inset: 0; pointer-events: none;
   background: var(--well-veil);
+  /* Same reason as the layers above: the parent rounded clip does not
+     survive compositing, so every child rounds itself. */
+  border-radius: inherit;
 }
 
 /* scanline texture — reads as "rendered", not photographic */
@@ -566,6 +566,7 @@ body::before {
   background: repeating-linear-gradient(
     180deg, var(--phos-soft) 0 1px, transparent 1px 3px);
   mix-blend-mode: overlay; opacity: var(--scan-op);
+  border-radius: inherit;
 }
 
 /* satellite nodes around the root */
