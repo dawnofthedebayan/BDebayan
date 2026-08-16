@@ -36,7 +36,7 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Check content.js parses
         # content.js is machine-written by the CMS. If a bad edit lands, fail
@@ -93,6 +93,11 @@ jobs:
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
+        with:
+          # Turn Pages on if it is not already. Without this the run fails
+          # with "Get Pages site failed" until someone flips the setting by
+          # hand in Settings -> Pages -> Source -> GitHub Actions.
+          enablement: true
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
