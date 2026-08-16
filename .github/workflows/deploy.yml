@@ -92,12 +92,13 @@ jobs:
           fi
 
       - name: Setup Pages
+        # No `enablement: true` here on purpose. Creating a Pages site via the
+        # API needs the "administration" permission, which GITHUB_TOKEN cannot
+        # be granted at all — it is not one of the available scopes. Asking for
+        # it only swaps a clear "Pages is not enabled" error for a confusing
+        # "Resource not accessible by integration" one. Pages must be switched
+        # on once by hand: Settings -> Pages -> Source -> GitHub Actions.
         uses: actions/configure-pages@v5
-        with:
-          # Turn Pages on if it is not already. Without this the run fails
-          # with "Get Pages site failed" until someone flips the setting by
-          # hand in Settings -> Pages -> Source -> GitHub Actions.
-          enablement: true
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
