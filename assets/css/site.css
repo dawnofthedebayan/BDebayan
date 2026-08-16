@@ -519,6 +519,9 @@ body::before {
   position: absolute; inset: 17%;
   border-radius: 50%;
   overflow: hidden;
+  /* isolate creates a stacking context, which keeps the composited canvas
+     inside this element rather than being promoted past its clip */
+  isolation: isolate;
   background: var(--well-bg);
   border: 1px solid var(--phos-edge);
   box-shadow: var(--well-shadow);
@@ -536,6 +539,14 @@ body::before {
   object-fit: cover; object-position: 50% 50%;
   opacity: 0;
   transition: opacity 0.26s var(--ease);
+  /* The layers clip themselves rather than trusting the parent to do it.
+     .photo-well is border-radius + overflow:hidden, but it also sits in a
+     preserve-3d context with its own translateZ — and a canvas inside that
+     gets its own compositing layer, which browsers routinely fail to apply
+     the rounded clip to. It is timing dependent, so it shows up over a real
+     network and not on localhost. Rounding each layer removes the
+     dependency on the parent clip entirely. */
+  border-radius: 50%;
 }
 .photo-well .well-img.is-on { opacity: 1; }
 
