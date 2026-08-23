@@ -299,19 +299,28 @@
      behaves the same for every visitor a small screen actually reaches:
      touch or mouse, narrow window or phone.
 
-     progress is 0 at the top of the page and reaches 1 exactly when the
-     hero's bottom edge reaches the nav — i.e. once the whole hero has
-     scrolled by, which is the plainest reading of "the end of the home
-     page". The rotation is one full turn mapped onto that same range, so
-     it completes its revolution and settles back to REST (his resting,
-     looking-up pose) right as it finishes docking — and because the dock
-     transform and the rotation are both pure functions of progress, nothing
-     here needs its own easing loop; scrolling up undocks it exactly as it
-     docked, frame for frame. */
+     Two separate progress values drive this, deliberately not the same
+     number:
+
+     - dockProgress is 0 at the top of the page and reaches 1 once the
+       hero's bottom edge reaches the nav — i.e. the bubble itself (the
+       opacity/scale swap with the dot) finishes docking quickly, over
+       just the hero, same as before.
+     - rotationProgress is 0 at the top of the page and reaches 1 only
+       once the Contact section — the last one, and the plainest reading
+       of "the end of the home page" — reaches the nav. One full turn is
+       mapped onto that whole range, so the docked head keeps spinning
+       the rest of the way down the page and lands back at REST (his
+       resting, looking-up pose) exactly as Contact arrives, instead of
+       finishing its spin as soon as it's done docking.
+
+     Both are pure functions of scrollY, so nothing here needs its own
+     easing loop; scrolling up reverses both exactly as they advanced. */
   var navHead = document.querySelector('.nav-head');
   var navHeadCanvas = navHead && navHead.querySelector('canvas');
   var navHeadCtx = navHeadCanvas && navHeadCanvas.getContext ? navHeadCanvas.getContext('2d') : null;
   var navDot = document.querySelector('.nav-mark .dot');
+  var contactEl = document.getElementById('contact');
 
   // Same fallback ladder as the sheet itself: no canvas, no gaze data, a
   // reduced-motion or save-data visitor — the dot just stays a dot.
@@ -325,7 +334,7 @@
     navHeadCanvas.height = px;
   }
 
-  function heroProgress() {
+  function dockProgress() {
     // window.scrollY rather than hero.getBoundingClientRect().top: the hero
     // sits at document-top and the nav is a fixed overlay that doesn't push
     // it down, so scrollY alone already *is* "how far past the top of the
@@ -335,6 +344,16 @@
     // fixed nav) read as scroll progress, so the bubble was already a few
     // percent visible before the visitor had scrolled at all.
     var total = Math.max(1, hero.offsetHeight);
+    return clamp(window.scrollY / total, 0, 1);
+  }
+
+  function rotationProgress() {
+    // Same scrollY-is-already-the-offset reasoning as dockProgress, just
+    // measured against the Contact section's own offset from the document
+    // top instead of the hero's height, so the turn spans every section in
+    // between rather than only the hero. Falls back to hero's own range if
+    // the section is ever missing, so this never divides by something odd.
+    var total = Math.max(1, contactEl ? contactEl.offsetTop : hero.offsetHeight);
     return clamp(window.scrollY / total, 0, 1);
   }
 
@@ -349,11 +368,11 @@
 
   function dockTick() {
     if (!canDock) return;
-    var p = heroProgress();
+    var p = dockProgress();
     navHead.style.opacity = p.toFixed(3);
     navHead.style.transform = 'scale(' + (0.4 + p * 0.6).toFixed(3) + ')';
     if (navDot) navDot.style.opacity = (1 - p).toFixed(3);
-    drawDockFrame(p);
+    drawDockFrame(rotationProgress());
   }
 
   if (canDock) {
