@@ -75,4 +75,4 @@ Disallow: /
 User-agent: omgilibot
 Disallow: /
 
-Sitemap: https://dawnofthedebayan.github.io/sitemap.xml
+Sitemap: https://www.bdebayan.com/sitemap.xml

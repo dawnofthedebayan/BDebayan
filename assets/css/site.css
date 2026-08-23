@@ -341,14 +341,45 @@ body::before {
   color: var(--text-2);
 }
 .nav-mark b { color: var(--text); font-weight: var(--w-head); }
+.mark-slot { position: relative; width: 9px; height: 9px; flex: none; display: block; }
 .nav-mark .dot {
+  position: absolute; inset: 0;
   width: 9px; height: 9px; border-radius: 50%;
   background: var(--phos); box-shadow: 0 0 0 4px var(--phos-glow);
   animation: pulse 3.6s ease-in-out infinite;
+  /* no transition here on purpose — the dock's dot-fade and bubble-fade are
+     both set directly from the same progress value every scroll tick, with
+     no easing on either side, so they stay pixel-exact mirrors of each
+     other. A transition on just one side would make it lag the other by
+     up to 0.3s and visibly drift out of sync while scrolling. */
 }
 @keyframes pulse {
   0%, 100% { box-shadow: 0 0 0 4px var(--phos-glow); }
   50%      { box-shadow: 0 0 0 8px var(--phos-soft); }
+}
+
+/* -------------------------------------------------- nav-head (mobile only)
+   The root node "docks" into this as you scroll past the hero — see the
+   dock section of hero.js. It sits on top of .dot, sized past mark-slot's
+   own 9x9 box via negative inset; absolutely-positioned elements don't
+   contribute to flex sizing, so this never nudges the name text over, on
+   any screen width. Hidden above 760px so desktop is untouched. */
+.nav-head {
+  display: none;
+  position: absolute; inset: -7px;
+  border-radius: 50%; overflow: hidden;
+  background: var(--well-bg);
+  box-shadow: 0 0 0 1.5px var(--phos-edge), 0 0 10px var(--phos-glow);
+  opacity: 0; transform: scale(0.4);
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+.nav-head-canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+@media (max-width: 760px) {
+  .nav-head { display: block; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .nav-head { transition: none; }
 }
 
 .nav-links { display: flex; align-items: center; gap: 4px; }

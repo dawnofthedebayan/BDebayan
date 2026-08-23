@@ -16,6 +16,15 @@
    Layered on top, unchanged from before: a continuous tilt/parallax on the
    node, and the easter-egg pose.
 
+   On narrow screens there is one more layer: as you scroll past the hero,
+   the head "docks" into the little dot beside the name in the nav — see
+   the DOCK section near the bottom. It draws from the same sprite sheet
+   into a second, tiny canvas, so its rotation is always exactly the frame
+   the big head last had, just re-sampled at a different angle (a direct
+   function of how far you have scrolled through the hero, not of cur/aim),
+   which is what keeps it in sync without coupling to whichever pointer
+   branch — cursor or scroll — happens to be driving the big head.
+
    Degrees follow the screen: atan2(dy, dx) with y pointing down, so -90 is
    up, 180 is screen-left, +90 is down, 0 is screen-right.
 
@@ -43,6 +52,10 @@
                !window.matchMedia('(hover: hover)').matches;
   var conn = navigator.connection || {};
   var thrifty = conn.saveData === true;
+  // "mobile" here means viewport width, same 760px the nav itself collapses
+  // at — deliberately independent of "coarse" (pointer capability), because
+  // the dock is a small-screen layout behaviour, not a touch behaviour.
+  var mobile = window.matchMedia('(max-width: 760px)').matches;
 
   /* ------------------------------------------------------------ the well */
   // The poster is already in index.html — it carries the alt text and is what
@@ -108,6 +121,7 @@
       resize();
       root.classList.add('has-sheet');
       draw(true);
+      dockTick();
     });
     img.addEventListener('error', function () { sheet = null; });
     img.src = sheet.src;
@@ -271,6 +285,83 @@
     }
   }
 
+  /* ------------------------------------------------------------- dock ---
+     <=760px only. As the hero scrolls past the fixed nav, the head docks
+     into the dot beside the name — see .nav-head / .mark-slot in the CSS
+     and the wrapper markup around .dot in index.html.
+
+     Deliberately its own small system rather than reusing cur/aim: those
+     are driven by whichever of onMove/onScroll is wired below, which
+     differs by pointer type, and coupling the dock to that would mean a
+     mouse user on a narrow window gets no dock rotation at all (their head
+     is cursor-driven, not scroll-driven). The dock instead reads scroll
+     position directly, same as the coarse-pointer fallback does, so it
+     behaves the same for every visitor a small screen actually reaches:
+     touch or mouse, narrow window or phone.
+
+     progress is 0 at the top of the page and reaches 1 exactly when the
+     hero's bottom edge reaches the nav — i.e. once the whole hero has
+     scrolled by, which is the plainest reading of "the end of the home
+     page". The rotation is one full turn mapped onto that same range, so
+     it completes its revolution and settles back to REST (his resting,
+     looking-up pose) right as it finishes docking — and because the dock
+     transform and the rotation are both pure functions of progress, nothing
+     here needs its own easing loop; scrolling up undocks it exactly as it
+     docked, frame for frame. */
+  var navHead = document.querySelector('.nav-head');
+  var navHeadCanvas = navHead && navHead.querySelector('canvas');
+  var navHeadCtx = navHeadCanvas && navHeadCanvas.getContext ? navHeadCanvas.getContext('2d') : null;
+  var navDot = document.querySelector('.nav-mark .dot');
+
+  // Same fallback ladder as the sheet itself: no canvas, no gaze data, a
+  // reduced-motion or save-data visitor — the dot just stays a dot.
+  var canDock = mobile && !!navHead && !!navHeadCtx && !!ctx && !!GAZE && !reduced && !thrifty;
+
+  function sizeNavHead() {
+    if (!navHeadCanvas) return;
+    var px = Math.round(24 * Math.min(window.devicePixelRatio || 1, 2));
+    if (px === navHeadCanvas.width) return;
+    navHeadCanvas.width = px;
+    navHeadCanvas.height = px;
+  }
+
+  function heroProgress() {
+    // window.scrollY rather than hero.getBoundingClientRect().top: the hero
+    // sits at document-top and the nav is a fixed overlay that doesn't push
+    // it down, so scrollY alone already *is* "how far past the top of the
+    // hero you've scrolled" — no extra offset to subtract. Using the rect
+    // instead double-counts the nav's own height as a false head start:
+    // it makes the overlap (navH pixels of hero permanently sit behind the
+    // fixed nav) read as scroll progress, so the bubble was already a few
+    // percent visible before the visitor had scrolled at all.
+    var total = Math.max(1, hero.offsetHeight);
+    return clamp(window.scrollY / total, 0, 1);
+  }
+
+  function drawDockFrame(progress) {
+    if (!ready) return;                // sheet not decoded yet — nothing to draw
+    var k = slotFor(REST - progress * 360);
+    var t = sheet.tile;
+    navHeadCtx.clearRect(0, 0, navHeadCanvas.width, navHeadCanvas.height);
+    navHeadCtx.drawImage(img, (k % sheet.cols) * t, Math.floor(k / sheet.cols) * t, t, t,
+                          0, 0, navHeadCanvas.width, navHeadCanvas.height);
+  }
+
+  function dockTick() {
+    if (!canDock) return;
+    var p = heroProgress();
+    navHead.style.opacity = p.toFixed(3);
+    navHead.style.transform = 'scale(' + (0.4 + p * 0.6).toFixed(3) + ')';
+    if (navDot) navDot.style.opacity = (1 - p).toFixed(3);
+    drawDockFrame(p);
+  }
+
+  if (canDock) {
+    sizeNavHead();
+    window.addEventListener('scroll', dockTick, { passive: true });
+    dockTick();
+  }
+
   /* ------------------------------------------------------------- wiring */
   loadSheet();
 
@@ -286,7 +377,11 @@
     resetIdle();
   }
 
-  window.addEventListener('resize', function () { resize(); draw(true); });
+  window.addEventListener('resize', function () {
+    resize();
+    draw(true);
+    if (canDock) { sizeNavHead(); dockTick(); }
+  });
 
   function clamp(v, a, b) { return v < a ? a : v > b ? b : v; }
 

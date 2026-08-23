@@ -24,10 +24,10 @@
 <meta property="og:type" content="website">
 <meta property="og:title" content="Debayan Bhattacharya — memory systems &amp; local inference">
 <meta property="og:description" content="Obsidian plugins, tiered-memory agents, and models that never leave the laptop.">
-<meta property="og:image" content="https://dawnofthedebayan.github.io/assets/hero/gaze-poster.jpg">
+<meta property="og:image" content="https://www.bdebayan.com/assets/hero/gaze-poster.jpg">
 <meta name="twitter:card" content="summary_large_image">
-<meta property="og:url" content="https://dawnofthedebayan.github.io/">
-<link rel="canonical" href="https://dawnofthedebayan.github.io/">
+<meta property="og:url" content="https://www.bdebayan.com/">
+<link rel="canonical" href="https://www.bdebayan.com/">
 
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><circle cx='16' cy='16' r='7' fill='%2334E2C0'/><circle cx='16' cy='16' r='13' fill='none' stroke='%2334E2C0' stroke-opacity='.35'/></svg>">
 
@@ -46,7 +46,16 @@
 
 <header class="nav">
   <a class="nav-mark" href="#top">
-    <span class="dot" aria-hidden="true"></span>
+    <!-- mark-slot keeps the dot's own footprint (9x9) in the flex row on
+         every screen size. nav-head is absolutely positioned over it and
+         only switched on <=760px — see hero.js's "dock" section — so it
+         never touches desktop layout at all. Because it lives inside this
+         same <a href="#top">, tapping the docked head is already "scroll to
+         top" for free, no extra click handler needed. -->
+    <span class="mark-slot" aria-hidden="true">
+      <span class="dot"></span>
+      <span class="nav-head"><canvas class="nav-head-canvas"></canvas></span>
+    </span>
     <b>Debayan Bhattacharya</b><b class="short">DB</b><span class="long"> · Hamburg</span>
   </a>
   <nav class="nav-links" aria-label="Sections" data-nav>

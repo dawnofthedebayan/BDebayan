@@ -404,9 +404,67 @@ Notes:
   through Jekyll, which ignores directories beginning with an underscore.
 - Every path in the site is relative, so it also works from a project repo
   served at `/repo-name/`.
-- For a custom domain: add a `CNAME` file containing the bare domain, point an
-  `ALIAS`/`ANAME` (or four `A` records) at GitHub's IPs, and tick "Enforce
-  HTTPS" once the certificate issues.
+- The canonical URL is **https://www.bdebayan.com** — see below.
+
+### The custom domain
+
+The site answers on **www.bdebayan.com**. Two things make that work, and only
+two:
+
+1. **Settings → Pages → Custom domain** = `www.bdebayan.com`.
+2. A DNS `CNAME` record: `www` → `dawnofthedebayan.github.io`.
+
+There is **no `CNAME` file in this repo, and there should not be.** That file
+is how the older "deploy from a branch" path carries the domain. This repo
+deploys from a custom Actions workflow, and GitHub's docs are explicit that in
+that case the file is ignored and not required — the domain lives in the Pages
+setting alone. Adding one does nothing; adding a *wrong* one does nothing
+either, which is worse, because it looks like it should work.
+
+The apex (`bdebayan.com` with no `www`) is a redirect to `www`, done at the
+DNS layer rather than by GitHub.
+
+Absolute URLs — `canonical`, `og:url`, `sitemap.xml`, the `Sitemap:` line in
+`robots.txt` — all name `https://www.bdebayan.com`. Everything else in the
+site is a relative path, so nothing else has to change if the domain ever does.
+
+### Cloudflare in front
+
+Cloudflare proxies the domain. The order of operations matters and is not
+recoverable if you get it wrong on the first pass:
+
+1. DNS records go in **DNS-only** (grey cloud) first.
+2. Wait for GitHub to issue the Let's Encrypt certificate — Settings → Pages
+   stops saying "certificate not yet created". Usually minutes.
+3. Tick **Enforce HTTPS** in the Pages settings.
+4. *Then* flip the records to **Proxied** (orange cloud).
+
+If you proxy first, GitHub cannot reach the domain to validate it, the
+certificate never issues, and "Enforce HTTPS" stays greyed out.
+
+One setting is non-negotiable: **SSL/TLS → Overview → Full** (or Full strict).
+The default on some accounts is *Flexible*, which talks to GitHub over plain
+HTTP; GitHub answers by redirecting to HTTPS; Cloudflare follows it back to
+itself, and the browser gives up with `ERR_TOO_MANY_REDIRECTS`. It is not a
+subtle failure and it is the single most common way this setup breaks.
+
+What Cloudflare is actually here for, in order of how much it matters:
+
+- **Seeing the traffic GoatCounter cannot.** The analytics beacon is
+  JavaScript, so it only ever sees browsers that run it. Scrapers do not.
+  Cloudflare sits in the request path, so its analytics count every request —
+  which bots, how often, what they asked for.
+- **Enforcing `robots.txt` instead of asking.** The AI-crawler rules in
+  `robots.txt` are advisory; a scraper that ignores the file is not stopped by
+  it. Cloudflare's **Block AI bots** toggle blocks the same crawlers at the
+  edge, where "no" means no.
+- **Caching.** Pages has a 100 GB/month soft bandwidth limit. Cached requests
+  never reach it.
+
+It is *not* meaningfully a security layer, and it is worth being clear about
+why: this is static HTML on someone else's CDN. There is no server to
+compromise, no database, no login, no form that writes anywhere. A WAF in
+front of it is guarding a building with no doors.
 
 Local preview without the CMS:
 
