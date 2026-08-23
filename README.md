@@ -11,6 +11,9 @@ assets/js/life.js                 Conway's Life running behind the page (canvas)
 assets/js/hero.js                 root-node photo interaction
 assets/js/app.js                  renders sections, theming, project edges
 assets/js/offclock.js             off-the-clock carousel + the ?edit composer
+assets/js/curiosities.js          concept carousel (home) + the library page
+assets/css/curiosities.css        everything the two curiosities surfaces need
+curiosities.html                  the library: search, tags, sort, grid, graph
 assets/img/vault-llm-architecture.svg       (and -light.svg)
 assets/hero/                      the baked head-rotation sprite sheets (deployed)
 photos/                           the raw head-rotation shoot (NOT deployed)
@@ -249,7 +252,86 @@ copyright. Small editorial use on a personal site is normal practice, but the
 placeholders shipped here are generated, so nothing you did not choose to add
 is in your repo.
 
-## 6. The CMS
+## 6. My curiosities
+
+Concepts, written out in my own words. One list in `content.js` feeds two
+surfaces:
+
+- the **carousel** on the home page, between Writing and Off the clock
+- **`curiosities.html`** — the whole collection, searchable
+
+Both come from `assets/js/curiosities.js`; the file notices which one it is
+on and only wires that half up.
+
+### The shape of a concept
+
+```js
+{
+  id: 'streisand-effect',        // the permalink and the graph key
+  title: 'The Streisand effect',
+  gist: 'One line. This is what the card shows.',
+  tags: ['psychology', 'internet'],
+  status: 'settled',             // settled | chewing | hunch
+  added: '2026-08-16',           // YYYY-MM-DD, drives newest-first
+  source: 'Who named it, and when.',
+  image: 'art/streisand.jpg',    // optional
+  imageCaption: 'optional',
+  body: 'The explanation. <br><br> between paragraphs, <em> works.',
+  why: 'Why it stuck with you — pulled out into its own block.',
+  links: [{ label: 'Wikipedia', href: 'https://…' }],
+  related: ['cunninghams-law']   // edges in the graph view
+}
+```
+
+`status` is the honest bit: **settled** means I think I understand it,
+**chewing** means I am still turning it over, **hunch** means I might be wrong.
+It shows as a pill on every card and filters on the library page.
+
+`related` is treated as undirected — writing it on one side is enough, the
+graph draws the edge and both detail panels show the chip.
+
+### The library page
+
+Search matches the title, the gist, the body, the why and the tags, with the
+HTML stripped first, so searching for a word buried inside an `<em>` still
+finds it. Multiple words are ANDed. Tag chips are ANDed too — pick two tags
+and you get the concepts carrying both.
+
+Everything is in the URL: `?q=`, `?tag=a,b`, `?status=`, `?sort=`,
+`?view=graph`, and `#concept-id` for a single concept. A filtered view is a
+link you can send someone, and the back button steps through the states you
+actually visited.
+
+`/` focuses the search box. `Escape` closes the open concept. `←` and `→`
+walk through the filtered list without closing it.
+
+### The graph view
+
+Nodes are concepts, edges are `related`, node size is how many connections a
+concept has. The layout is a small spring simulation run once at open and
+cached — no animation loop sitting behind the page. Hovering isolates a
+neighbourhood; filtering dims what falls outside it rather than removing it,
+so you can see what you excluded.
+
+### A note on the eight starter concepts
+
+The ones that shipped with this section are **my prose, not yours** — they are
+scaffolding so the page had something in it. The whole premise is "in my own
+words", so rewrite them. The CMS makes that quick: *Curiosities* tab, expand a
+row, and the two fields that matter are **In your own words** and **Why it
+stuck with you**.
+
+### Pictures
+
+Optional. A concept with no picture draws a constellation seeded from its id —
+stable across reloads, different for every concept, and it keeps the cards
+tied to the node-graph the rest of the site is made of. Add one through the
+CMS (*Media* tab or the **Choose** button on the concept) if a diagram or a
+photograph says it better.
+
+---
+
+## 7. The CMS
 
 `./cms/start.sh` opens an editor at `http://localhost:4000/admin/` with the
 live site in a pane beside it. It covers identity and hero copy, sections,
@@ -294,7 +376,7 @@ entirely, which is how deleting a section works. A `type: 'custom'` section
 also carries `blocks: [{ title, meta, text, href, linkLabel }]`, rendered as
 cards in the same style as the writing section.
 
-## 7. Deploying
+## 8. Deploying
 
 Push to `main` and `.github/workflows/deploy.yml` does the rest: it checks that
 `content.js` still parses and reports what it found, then uploads the repo and
@@ -335,7 +417,7 @@ python3 -m http.server 8000
 Opening `index.html` over `file://` also works — content is a `window.SITE`
 object rather than a `fetch`ed JSON file specifically so that it does.
 
-## 8. The background
+## 9. The background
 
 Conway's Game of Life, B3/S23, running behind everything on a canvas.
 
@@ -393,7 +475,7 @@ relative to what the renderer costs anyway.
 From the console: `LIFE.reseed()`, `LIFE.clear()`, `LIFE.population()`,
 `LIFE.stamp('glider', x, y)`, `LIFE.patterns`.
 
-## 9. Light and dark
+## 10. Light and dark
 
 There are two themes and a toggle in the nav (the knob is a graph node
 travelling along an edge). Resolution order:
@@ -432,7 +514,7 @@ Three things worth knowing if you change it:
 the page's CSS. `app.js` swaps the `src` on theme change. If you add a diagram
 and skip the light variant, it will 404 in light mode.
 
-## 10. Palette and type
+## 11. Palette and type
 
 | Token | Dark | Light | Use |
 |---|---|---|---|

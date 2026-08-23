@@ -331,6 +331,17 @@ window.SITE = {
       "inNav": true
     },
     {
+      "id": "curiosities",
+      "type": "curiosities",
+      "enabled": true,
+      "inNav": true,
+      "nav": "curiosities",
+      "navShort": "curious",
+      "label": "My curiosities",
+      "title": "Things I keep thinking about.",
+      "intro": "Ideas I keep turning over. Mostly things with a name, where the name turned out to be doing a lot of work."
+    },
+    {
       "id": "offclock",
       "type": "offclock",
       "enabled": true,
@@ -400,5 +411,168 @@ window.SITE = {
   },
   "analytics": {
     "goatcounter": ""
+  },
+  "curiosities": {
+    "intro": "Ideas I keep turning over. Mostly things with a name, where the name turned out to be doing a lot of work.",
+    "pageTitle": "Things I keep thinking about",
+    "pageIntro": "A running collection of concepts I find interesting. ",
+    "items": [
+      {
+        "id": "streisand-effect",
+        "title": "The Streisand effect",
+        "gist": "Trying to suppress something is itself information, and the internet reads it.",
+        "tags": [
+          "psychology",
+          "internet",
+          "systems"
+        ],
+        "status": "settled",
+        "added": "2026-08-16",
+        "source": "Named after a 2003 lawsuit over an aerial photo of a house.",
+        "body": "Barbra Streisand sued to have a photograph of her clifftop house removed from a public coastal-erosion survey. Before the suit, the image had been downloaded six times, two of them by her own lawyers. The lawsuit was reported, and it was downloaded well over a million times in the following month.<br><br>The interesting part is not the irony. It is that <em>the act of suppression is a signal</em>. Nobody had any reason to look at photo number 3850 in a survey of the Californian coast until somebody powerful indicated that it mattered. Attention is scarce, and the effort spent hiding something is a surprisingly reliable estimate of how interesting it is.",
+        "links": [
+          {
+            "label": "Wikipedia",
+            "href": "https://en.wikipedia.org/wiki/Streisand_effect"
+          }
+        ],
+        "related": [
+          "goodharts-law"
+        ],
+        "why": "This is a good way for me to find good movies to watch. If a government is trying to censor a movie, I know it will be worth the watch. "
+      },
+      {
+        "id": "goodharts-law",
+        "title": "Goodhart’s law",
+        "gist": "When a measure becomes a target, it stops being a good measure.",
+        "tags": [
+          "systems",
+          "machine-learning",
+          "economics"
+        ],
+        "status": "settled",
+        "added": "2026-08-16",
+        "source": "Charles Goodhart, 1975, on monetary policy. Marilyn Strathern gave it the phrasing everyone quotes.",
+        "body": "Goodhart was writing about central banks: any statistical regularity you observe will collapse once you start using it as a lever, because everyone now has a reason to game it. Strathern compressed it to the line people actually remember.<br><br>The sharp version is that a metric is a <em>proxy</em>. It correlates with the thing you care about across the range you happened to observe. Optimise hard enough against the proxy and you leave that range and you are now in the region where the correlation never held.",
+        "why": "This is the whole of machine learning in one sentence, and I do not think that is an exaggeration. Every loss function is a proxy for something you cannot write down. \nReward hacking, benchmark contamination, a model that aces the eval and is useless in the product is Goodhart's law in some shape and form.  \nRecent victim of Goodhart's law is tokenmaxxing. When consuming token became a proxy of productivity, it stopped being a good measure. Case in point Uber and Meta. ",
+        "links": [
+          {
+            "label": "Wikipedia",
+            "href": "https://en.wikipedia.org/wiki/Goodhart%27s_law"
+          }
+        ],
+        "related": [
+          "streisand-effect"
+        ]
+      },
+      {
+        "id": "chestertons-fence",
+        "title": "Chesterton’s fence",
+        "gist": "Do not remove a fence until you know why somebody put it there.",
+        "tags": [
+          "systems",
+          "decisions",
+          "philosophy"
+        ],
+        "status": "settled",
+        "added": "2026-08-16",
+        "source": "G. K. Chesterton, The Thing, 1929.",
+        "body": "Chesterton describes a fence across a road with no obvious purpose. The impatient reformer says: I see no use for this, let us clear it away. The wiser answer is: if you do not see its use, I will not let you clear it away  but go and find out, and when you come back and tell me you do see its use, I may allow you to destroy it.<br><br>It is not an argument for keeping things. It is an argument about the order of operations: understand, then decide.",
+        "why": "Every legacy codebase is a field of these. So is every process at a large company. I try my best to understand why something is put in place before wanting to remove it. ",
+        "links": [
+          {
+            "label": "Original passage",
+            "href": "https://en.wikipedia.org/wiki/G._K._Chesterton#Chesterton's_fence"
+          }
+        ],
+        "related": []
+      },
+      {
+        "id": "moravecs-paradox",
+        "title": "Moravec’s paradox",
+        "gist": "The hard problems turned out to be easy, and the easy ones impossibly hard.",
+        "tags": [
+          "machine-learning",
+          "cognition",
+          "robotics"
+        ],
+        "status": "chewing",
+        "added": "2026-08-16",
+        "source": "Hans Moravec, Mind Children, 1988.",
+        "body": "Reasoning like chess, theorem proving, symbolic logic takes remarkably little computation. Perception and mobility, the things a one-year-old does without thinking, take enormous amounts. \nMoravec’s explanation is evolutionary: sensorimotor skill has been under optimisation for a billion years and is deeply, invisibly good. Abstract reasoning is a few thousand years old and barely debugged.<br><br>Which means introspection is a terrible guide to difficulty. The things that feel effortful to us are the recently-bolted-on ones.",
+        "why": "It stuck with me because I found this interesting. ",
+        "links": [
+          {
+            "label": "Wikipedia",
+            "href": "https://en.wikipedia.org/wiki/Moravec%27s_paradox"
+          }
+        ],
+        "related": []
+      },
+      {
+        "id": "survivorship-bias",
+        "title": "Survivorship bias",
+        "gist": "Armour the parts of the returning planes with no bullet holes.",
+        "tags": [
+          "statistics",
+          "decisions",
+          "psychology"
+        ],
+        "status": "settled",
+        "added": "2026-08-16",
+        "source": "Abraham Wald, Statistical Research Group, 1943.",
+        "body": "The military wanted armour where returning bombers showed the most damage. Wald pointed out the inversion: those are the places a plane can be hit and still come home. The undamaged regions on survivors are exactly where the lost planes were hit.<br><br>The general form is that your sample is not the population but it is the population filtered by whatever process let it reach you. And that filter is usually invisible, because the things it removed are, by construction, not in front of you.",
+        "why": "Nearly every dataset I have trained on has one of these hiding in it.  Something I try my best to keep in my mind when approaching a new problem. ",
+        "links": [
+          {
+            "label": "Wald’s memoranda",
+            "href": "https://en.wikipedia.org/wiki/Abraham_Wald#Wald's_work_on_aircraft_survivability"
+          }
+        ],
+        "related": []
+      },
+      {
+        "id": "cunninghams-law",
+        "title": "Cunningham’s law",
+        "gist": "The fastest way to get an answer is to post a wrong one.",
+        "tags": [
+          "internet",
+          "psychology"
+        ],
+        "status": "settled",
+        "added": "2026-08-16",
+        "source": "Attributed to Ward Cunningham, who invented the wiki and disowns the attribution.",
+        "body": "Asking a question online is a request for a favour. Posting something confidently incorrect is an invitation to demonstrate superiority, which is a far stronger motivator. The correction arrives faster and in more detail than any answer to a polite question would have.<br><br>Cunningham has said he never said it, which is itself a nicely recursive demonstration.",
+        "why": "I remember this concept because I want to use it someday to get what I want albeit it damages my reputation. But anonymously doing this is fine. Reddit someday.",
+        "links": [
+          {
+            "label": "Background",
+            "href": "https://en.wikipedia.org/wiki/Ward_Cunningham#Cunningham's_Law"
+          }
+        ],
+        "related": []
+      },
+      {
+        "id": "frequency-illusion",
+        "title": "The frequency illusion",
+        "gist": "You learn a word, then it is suddenly everywhere. It was always everywhere.",
+        "tags": [
+          "cognition",
+          "psychology"
+        ],
+        "status": "settled",
+        "added": "2026-08-16",
+        "source": "Named by Arnold Zwicky, 2005. Also called Baader–Meinhof.",
+        "body": "Two mechanisms stacked. Selective attention means a newly-learned thing now clears the filter that was discarding it. Confirmation bias means each subsequent sighting feels like evidence of a real increase rather than a sampling artefact.<br><br>The base rate never changed. Your detector did.",
+        "why": "It is a good reminder that the feeling of a trend and the existence of one are almost unrelated, and that I am a badly calibrated instrument for measuring how common anything is. Which is most of the argument for writing measurements down instead of remembering them.\n",
+        "links": [
+          {
+            "label": "Zwicky’s note",
+            "href": "https://en.wikipedia.org/wiki/Frequency_illusion"
+          }
+        ],
+        "related": []
+      }
+    ]
   }
 };

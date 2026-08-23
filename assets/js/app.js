@@ -172,10 +172,13 @@
 
     var skip = document.querySelector('.skip');
     var first = SECTIONS.filter(function (x) { return x.enabled !== false; })[0];
-    if (skip && first) { skip.href = '#' + first.id; skip.textContent = 'Skip to ' + (first.nav || first.label); }
+    if (skip && first && live[first.id]) {
+      skip.href = '#' + first.id;
+      skip.textContent = 'Skip to ' + (first.nav || first.label);
+    }
   }
 
-  applySections();
+  if (main) applySections();
 
   /* ============================================================ PROJECTS */
   var cardsEl = document.querySelector('.pcards');
@@ -351,9 +354,17 @@
   /* ================================================== NAV SCROLL-SPY etc. */
   var nav = document.querySelector('.nav');
   var links = Array.prototype.slice.call(document.querySelectorAll('.nav-links a'));
-  var sections = links.map(function (a) {
-    return document.querySelector(a.getAttribute('href'));
-  }).filter(Boolean);
+  /* On a subpage these hrefs are "index.html#writing" — not a valid selector,
+     and not a section on this page either. Resolve only same-page fragments,
+     and keep links and sections index-aligned by filtering them together. */
+  var sections = [];
+  links = links.filter(function (a) {
+    var href = a.getAttribute('href') || '';
+    var i = href.indexOf('#');
+    var el = i === 0 && href.length > 1 ? document.querySelector(href) : null;
+    if (el) sections.push(el);
+    return !!el;
+  });
 
   window.addEventListener('scroll', function () {
     nav.classList.toggle('is-stuck', window.scrollY > 24);

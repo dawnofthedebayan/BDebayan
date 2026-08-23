@@ -37,6 +37,7 @@
      in-between weights (430 / 560) it needs to hold up against paper. -->
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Space+Grotesk:wght@400..700&display=swap">
 <link rel="stylesheet" href="assets/css/site.css">
+<link rel="stylesheet" href="assets/css/curiosities.css">
 </head>
 
 <body>
@@ -161,6 +162,44 @@
     </div>
   </section>
 
+  <!-- ========================================================= CURIOSITIES -->
+  <section class="section" id="curiosities" data-section="curiosities">
+    <div class="wrap">
+      <div class="section-head rv">
+        <div class="section-label" data-sec-label></div>
+        <h2 data-sec-title></h2>
+        <p data-sec-intro></p>
+      </div>
+    </div>
+
+    <div class="cur rv">
+      <div class="wrap">
+        <div class="cur-bar">
+          <div class="cur-navs">
+            <button class="cur-nav" data-cur-prev type="button" aria-label="Scroll carousel left">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <button class="cur-nav" data-cur-next type="button" aria-label="Scroll carousel right">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+          </div>
+          <div class="cur-rail" aria-hidden="true"><span></span></div>
+          <div class="cur-count" data-cur-count></div>
+        </div>
+      </div>
+
+      <div class="cur-track" role="list" aria-label="Curiosities"></div>
+
+      <div class="wrap">
+        <div class="cur-drawer" id="cur-drawer"><div><div class="cur-drawer-in"></div></div></div>
+        <div class="cur-more">
+          <a class="btn" href="curiosities.html">Browse all <span data-cur-all-n>0</span> concepts
+            <span class="arw" aria-hidden="true">&#8594;</span></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- =========================================================== OFF CLOCK -->
   <section class="section" id="offclock" data-section="offclock">
     <div class="wrap">
@@ -229,6 +268,7 @@
 <script src="assets/js/app.js" defer></script>
 <script src="assets/js/hero.js" defer></script>
 <script src="assets/js/offclock.js" defer></script>
+<script src="assets/js/curiosities.js" defer></script>
 <script src="assets/js/analytics.js" defer></script>
 </body>
 </html>
