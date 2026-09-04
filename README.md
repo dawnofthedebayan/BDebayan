@@ -9,11 +9,14 @@ assets/css/site.css               the whole design system
 assets/js/content.js              ← every word on the site (written by the CMS)
 assets/js/life.js                 Conway's Life running behind the page (canvas)
 assets/js/hero.js                 root-node photo interaction
-assets/js/app.js                  renders sections, theming, project edges
-assets/js/offclock.js             off-the-clock carousel + the ?edit composer
-assets/js/curiosities.js          concept carousel (home) + the library page
-assets/css/curiosities.css        everything the two curiosities surfaces need
-curiosities.html                  the library: search, tags, sort, grid, graph
+assets/js/app.js                  renders sections and theming
+assets/js/shelf.js                how a collection behaves: rail, page, graph
+assets/js/collections.js          what each collection puts inside a card
+assets/css/shelf.css              the look of a collection, on both surfaces
+projects.html                     ⎫
+writing.html                      ⎬ a page per collection: search, filters,
+curiosities.html                  ⎪ sort, grid or graph, detail modal
+offclock.html                     ⎭
 assets/img/vault-llm-architecture.svg       (and -light.svg)
 assets/hero/                      the baked head-rotation sprite sheets (deployed)
 photos/                           the raw head-rotation shoot (NOT deployed)
@@ -41,6 +44,39 @@ pushes, and lets the GitHub Actions workflow redeploy the site.
 
 Everything below is the detail underneath that loop. See
 [`cms/README.md`](cms/README.md) for the CMS itself.
+
+### Every section is a collection
+
+Projects, writing, curiosities and off-the-clock are all the same thing: a set
+of items worth looking through. So they all work the same way, and there is
+only one implementation of it.
+
+| surface | what it is | where |
+|---|---|---|
+| the rail | cards on the home page that expand into a drawer underneath, with a **Browse all …** button at the end | `.shelf` in `index.html` |
+| the page | the whole collection — search, filter chips, sorting, grid or graph, a detail modal, all of it shareable as a URL | `.lib` in `<collection>.html` |
+
+`assets/js/shelf.js` is all of the behaviour and none of the content: it is
+handed a config and never looks at what an item actually is.
+`assets/js/collections.js` holds those four configs — title, one-line gist,
+card art, what you can filter by, what connects two items, and what the opened
+detail looks like. `assets/css/shelf.css` styles both surfaces.
+
+Adding a fifth collection is a config in `collections.js`, a `.shelf` block in
+`index.html`, and a copy of one of the four pages with its `data-collection`
+changed. Nothing else needs to know about it.
+
+Two details worth knowing, because they are decisions rather than accidents:
+
+- **The chips on a card and the chips you can filter by are not the same set.**
+  A card shows everything informative; the filter row keeps only what actually
+  groups things, drops any facet that every item carries (filtering by "2026"
+  when everything is from 2026 does nothing), and hides itself when nothing
+  qualifies. Anything dropped is still findable by search.
+- **The graph needs real relations.** Projects and curiosities have them
+  hand-written (`links` / `related`). Writing threads a series in the order it
+  was written. Off-the-clock joins things of the same kind, which is the only
+  honest relation that list has.
 
 ---
 
@@ -156,6 +192,7 @@ Everything lives in `assets/js/content.js`. Copy an existing block:
   stack: ['TypeScript', 'Python'],
   links: ['vault-llm'],              // draws an edge to that project's node
   cta: [{ label: 'Repo', href: '…' }],   // optional
+  image: 'assets/img/foo.jpg',       // optional card art
   diagram: 'assets/img/foo.svg',     // optional
   problem: '…',                      // the technical problem
   built: ['…', '…'],                 // array; HTML allowed (<em>, <code>)
@@ -163,30 +200,27 @@ Everything lives in `assets/js/content.js`. Copy an existing block:
 }
 ```
 
-Positioning in the graph is set by `nth-child` rules in `site.css` under
-"Staggered placement". Five cards are laid out by hand there; a sixth will fall
-back to the grid flow — add another `nth-child(6)` rule to place it
-deliberately. The connecting curves are computed at runtime from `links`, so
-they follow whatever layout you choose.
-
-**Smaller projects** go in the `notebook` array instead — one line each, no
-detail view. That is the pressure valve so the site does not need every project
-polished.
+Order in the array is the order on the rail. `links` draws the edges in the
+graph view on `projects.html`, and both ends light up — a one-way link is
+enough. With no `image` the card draws a constellation from the `id`, which is
+a real choice rather than a gap.
 
 ## 4. Adding a post
 
-Also `content.js`, under `writing.posts`. `flagship: true` gets the large card
-treatment (three of those is the right number); everything else drops into the
-series list below. Posts are curated by hand deliberately — no RSS fetch, no
-CORS proxy, nothing that can break silently when Substack changes its markup.
+Also `content.js`, under `writing.posts`. Posts are curated by hand
+deliberately — no RSS fetch, no CORS proxy, nothing that can break silently
+when Substack changes its markup. `flagship: true` tags one as featured; posts
+whose title carries `writing.seriesName` are threaded together in the order
+they were written, which is what the graph view on `writing.html` draws.
 
 ---
 
 ## 5. Off the clock
 
-A horizontal carousel of records, films, books and whatever else. Cards scroll
-by drag, arrow buttons, trackpad or keyboard, and expand into a shared drawer
-underneath.
+Records, films, books and whatever else, on the same rail as everything else.
+An entry's `badge` ("On the turntable", "Reading now") is what shows on the
+card; `kind` decides the colour and is what the filter dropdown on
+`offclock.html` groups by.
 
 ### Adding an item
 
@@ -254,14 +288,10 @@ is in your repo.
 
 ## 6. My curiosities
 
-Concepts, written out in my own words. One list in `content.js` feeds two
-surfaces:
-
-- the **carousel** on the home page, between Writing and Off the clock
-- **`curiosities.html`** — the whole collection, searchable
-
-Both come from `assets/js/curiosities.js`; the file notices which one it is
-on and only wires that half up.
+Concepts, written out in my own words. Like every other section it feeds two
+surfaces — the rail on the home page and `curiosities.html` — through
+`shelf.js` and its config in `collections.js`. It is the collection with the
+richest per-item content, so the shape below is worth knowing.
 
 ### The shape of a concept
 
@@ -290,25 +320,27 @@ It shows as a pill on every card and filters on the library page.
 `related` is treated as undirected — writing it on one side is enough, the
 graph draws the edge and both detail panels show the chip.
 
-### The library page
+### The collection page
 
-Search matches the title, the gist, the body, the why and the tags, with the
-HTML stripped first, so searching for a word buried inside an `<em>` still
-finds it. Multiple words are ANDed. Tag chips are ANDed too — pick two tags
-and you get the concepts carrying both.
+This part is the same on all four pages. Search matches everything the config
+puts in its haystack — for a concept that is the title, gist, body, why and
+tags — with the HTML stripped first, so a word buried inside an `<em>` still
+finds it. Multiple words are ANDed. Filter chips are ANDed too: pick two and
+you get only what carries both.
 
 Everything is in the URL: `?q=`, `?tag=a,b`, `?status=`, `?sort=`,
 `?view=graph`, and `#concept-id` for a single concept. A filtered view is a
 link you can send someone, and the back button steps through the states you
 actually visited.
 
-`/` focuses the search box. `Escape` closes the open concept. `←` and `→`
-walk through the filtered list without closing it.
+`/` focuses the search box. `Escape` closes what is open. `←` and `→` walk
+through the filtered list without closing it. The dice button opens one at
+random from whatever is currently filtered in.
 
 ### The graph view
 
-Nodes are concepts, edges are `related`, node size is how many connections a
-concept has. The layout is a small spring simulation run once at open and
+Nodes are items, edges are whatever that collection counts as a relation, and
+node size is how many connections a node has. The layout is a small spring simulation run once at open and
 cached — no animation loop sitting behind the page. Hovering isolates a
 neighbourhood; filtering dims what falls outside it rather than removing it,
 so you can see what you excluded.
@@ -334,9 +366,9 @@ photograph says it better.
 ## 7. The CMS
 
 `./cms/start.sh` opens an editor at `http://localhost:4000/admin/` with the
-live site in a pane beside it. It covers identity and hero copy, sections,
-projects, the notebook, posts, off-the-clock items, image uploads, and
-publishing. Full details in [`cms/README.md`](cms/README.md).
+live site in a pane beside it. It covers identity and hero copy, sections, the
+four collections and their page headings, image uploads, and publishing. Full
+details in [`cms/README.md`](cms/README.md).
 
 Two things worth stating plainly:
 

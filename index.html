@@ -16,14 +16,14 @@
   document.documentElement.setAttribute('data-theme', t);
 })();
 </script>
-<title>Debayan Bhattacharya — memory systems &amp; local inference</title>
-<meta name="description" content="I build memory systems and local-inference pipelines for personal AI, and lead AI/ML direction at Airbus. Obsidian plugins, tiered-memory agents, and models that never leave the laptop.">
+<title>Debayan Bhattacharya — AI/ML @ Airbus, Hamburg</title>
+<meta name="description" content="I build AI tools for myself first, for the world second. AI/ML at Airbus in Hamburg, a PhD in machine learning, and writing about what I am actually building.">
 <meta name="author" content="Debayan Bhattacharya">
 <meta name="theme-color" content="#0A0C16" data-theme-color>
 
 <meta property="og:type" content="website">
-<meta property="og:title" content="Debayan Bhattacharya — memory systems &amp; local inference">
-<meta property="og:description" content="Obsidian plugins, tiered-memory agents, and models that never leave the laptop.">
+<meta property="og:title" content="Debayan Bhattacharya — AI/ML @ Airbus, Hamburg">
+<meta property="og:description" content="Projects, writing, the concepts I keep thinking about, and what I get up to off the clock.">
 <meta property="og:image" content="https://www.bdebayan.com/assets/hero/gaze-poster.jpg">
 <meta name="twitter:card" content="summary_large_image">
 <meta property="og:url" content="https://www.bdebayan.com/">
@@ -36,8 +36,8 @@
 <!-- Space Grotesk is loaded as a variable font so light mode can use the
      in-between weights (430 / 560) it needs to hold up against paper. -->
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Space+Grotesk:wght@400..700&display=swap">
-<link rel="stylesheet" href="assets/css/site.css?v=20260823">
-<link rel="stylesheet" href="assets/css/curiosities.css?v=20260823">
+<link rel="stylesheet" href="assets/css/site.css?v=20260904">
+<link rel="stylesheet" href="assets/css/shelf.css?v=20260904">
 </head>
 
 <body>
@@ -131,16 +131,32 @@
         <h2 data-sec-title></h2>
         <p data-sec-intro></p>
       </div>
+    </div>
 
-      <div class="pgraph">
-        <svg class="pedges" aria-hidden="true" preserveAspectRatio="none"></svg>
-        <div class="pcards"></div>
+    <div class="shelf rv" data-collection="projects">
+      <div class="wrap">
+        <div class="shelf-bar">
+          <div class="shelf-navs">
+            <button class="shelf-nav" data-shelf-prev type="button" aria-label="Scroll projects left">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <button class="shelf-nav" data-shelf-next type="button" aria-label="Scroll projects right">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+          </div>
+          <div class="shelf-rail" aria-hidden="true"><span></span></div>
+          <div class="shelf-count" data-shelf-count></div>
+        </div>
       </div>
 
-      <div class="notebook rv">
-        <h3 data-bind="notebookTitle"></h3>
-        <p data-bind="notebookIntro"></p>
-        <div class="nb-list"></div>
+      <div class="shelf-track" role="list" aria-label="Projects"></div>
+
+      <div class="wrap">
+        <div class="shelf-drawer" id="projects-drawer"><div><div class="shelf-drawer-in"></div></div></div>
+        <div class="shelf-more">
+          <a class="btn" href="projects.html">Browse all <span data-shelf-all-n>0</span> projects
+            <span class="arw" aria-hidden="true">&#8594;</span></a>
+        </div>
       </div>
     </div>
   </section>
@@ -153,19 +169,31 @@
         <h2 data-sec-title></h2>
         <p data-sec-intro></p>
       </div>
+    </div>
 
-      <div class="posts"></div>
-
-      <div class="series rv">
-        <div class="series-head">
-          <h3>Building My Second Brain — the series</h3>
-          <span>and other posts</span>
+    <div class="shelf rv" data-collection="writing">
+      <div class="wrap">
+        <div class="shelf-bar">
+          <div class="shelf-navs">
+            <button class="shelf-nav" data-shelf-prev type="button" aria-label="Scroll writing left">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <button class="shelf-nav" data-shelf-next type="button" aria-label="Scroll writing right">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+          </div>
+          <div class="shelf-rail" aria-hidden="true"><span></span></div>
+          <div class="shelf-count" data-shelf-count></div>
         </div>
-        <ol></ol>
-        <div style="margin-top:22px">
-          <a class="btn" data-href="substack" target="_blank" rel="noopener">
-            All posts on Substack <span class="arw" aria-hidden="true">↗</span>
-          </a>
+      </div>
+
+      <div class="shelf-track" role="list" aria-label="Writing"></div>
+
+      <div class="wrap">
+        <div class="shelf-drawer" id="writing-drawer"><div><div class="shelf-drawer-in"></div></div></div>
+        <div class="shelf-more">
+          <a class="btn" href="writing.html">Browse all <span data-shelf-all-n>0</span> posts
+            <span class="arw" aria-hidden="true">&#8594;</span></a>
         </div>
       </div>
     </div>
@@ -181,28 +209,28 @@
       </div>
     </div>
 
-    <div class="cur rv">
+    <div class="shelf rv" data-collection="curiosities">
       <div class="wrap">
-        <div class="cur-bar">
-          <div class="cur-navs">
-            <button class="cur-nav" data-cur-prev type="button" aria-label="Scroll carousel left">
+        <div class="shelf-bar">
+          <div class="shelf-navs">
+            <button class="shelf-nav" data-shelf-prev type="button" aria-label="Scroll curiosities left">
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </button>
-            <button class="cur-nav" data-cur-next type="button" aria-label="Scroll carousel right">
+            <button class="shelf-nav" data-shelf-next type="button" aria-label="Scroll curiosities right">
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </button>
           </div>
-          <div class="cur-rail" aria-hidden="true"><span></span></div>
-          <div class="cur-count" data-cur-count></div>
+          <div class="shelf-rail" aria-hidden="true"><span></span></div>
+          <div class="shelf-count" data-shelf-count></div>
         </div>
       </div>
 
-      <div class="cur-track" role="list" aria-label="Curiosities"></div>
+      <div class="shelf-track" role="list" aria-label="Curiosities"></div>
 
       <div class="wrap">
-        <div class="cur-drawer" id="cur-drawer"><div><div class="cur-drawer-in"></div></div></div>
-        <div class="cur-more">
-          <a class="btn" href="curiosities.html">Browse all <span data-cur-all-n>0</span> concepts
+        <div class="shelf-drawer" id="curiosities-drawer"><div><div class="shelf-drawer-in"></div></div></div>
+        <div class="shelf-more">
+          <a class="btn" href="curiosities.html">Browse all <span data-shelf-all-n>0</span> concepts
             <span class="arw" aria-hidden="true">&#8594;</span></a>
         </div>
       </div>
@@ -219,26 +247,30 @@
       </div>
     </div>
 
-    <div class="oc rv">
+    <div class="shelf rv" data-collection="offclock">
       <div class="wrap">
-        <div class="oc-bar">
-          <div class="oc-navs">
-            <button class="oc-nav" data-oc-prev type="button" aria-label="Scroll carousel left">
+        <div class="shelf-bar">
+          <div class="shelf-navs">
+            <button class="shelf-nav" data-shelf-prev type="button" aria-label="Scroll off the clock left">
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </button>
-            <button class="oc-nav" data-oc-next type="button" aria-label="Scroll carousel right">
+            <button class="shelf-nav" data-shelf-next type="button" aria-label="Scroll off the clock right">
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </button>
           </div>
-          <div class="oc-rail" aria-hidden="true"><span></span></div>
-          <div class="oc-count" data-oc-count></div>
+          <div class="shelf-rail" aria-hidden="true"><span></span></div>
+          <div class="shelf-count" data-shelf-count></div>
         </div>
       </div>
 
-      <div class="oc-track" role="list" aria-label="Off the clock"></div>
+      <div class="shelf-track" role="list" aria-label="Off the clock"></div>
 
       <div class="wrap">
-        <div class="oc-drawer" id="oc-drawer"><div><div class="oc-drawer-in"></div></div></div>
+        <div class="shelf-drawer" id="offclock-drawer"><div><div class="shelf-drawer-in"></div></div></div>
+        <div class="shelf-more">
+          <a class="btn" href="offclock.html">Browse all <span data-shelf-all-n>0</span> things
+            <span class="arw" aria-hidden="true">&#8594;</span></a>
+        </div>
       </div>
     </div>
   </section>
@@ -268,16 +300,19 @@
 
 </main>
 
-<script src="assets/js/content.js?v=20260823"></script>
+<script src="assets/js/content.js?v=20260904"></script>
 <!-- Generated by tools/bake_hero.py — describes the head-rotation sprite
      sheet (grid shape, cell size, which angle cell 0 holds). A plain script
      rather than a fetch of gaze.json so file:// preview keeps working. -->
-<script src="assets/hero/gaze.js?v=20260823"></script>
-<script src="assets/js/life.js?v=20260823" defer></script>
-<script src="assets/js/app.js?v=20260823" defer></script>
-<script src="assets/js/hero.js?v=20260823" defer></script>
-<script src="assets/js/offclock.js?v=20260823" defer></script>
-<script src="assets/js/curiosities.js?v=20260823" defer></script>
-<script src="assets/js/analytics.js?v=20260823" defer></script>
+<script src="assets/hero/gaze.js?v=20260904"></script>
+<script src="assets/js/life.js?v=20260904" defer></script>
+<script src="assets/js/app.js?v=20260904" defer></script>
+<script src="assets/js/hero.js?v=20260904" defer></script>
+<!-- shelf.js is the mechanics of a collection, collections.js is what each
+     one is made of. Both are needed on every page that shows a rail or a
+     collection page, and shelf.js has to be parsed first. -->
+<script src="assets/js/shelf.js?v=20260904" defer></script>
+<script src="assets/js/collections.js?v=20260904" defer></script>
+<script src="assets/js/analytics.js?v=20260904" defer></script>
 </body>
 </html>

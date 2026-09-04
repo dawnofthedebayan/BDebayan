@@ -349,11 +349,18 @@
 
   function rotationProgress() {
     // Same scrollY-is-already-the-offset reasoning as dockProgress, just
-    // measured against the Contact section's own offset from the document
-    // top instead of the hero's height, so the turn spans every section in
-    // between rather than only the hero. Falls back to hero's own range if
-    // the section is ever missing, so this never divides by something odd.
-    var total = Math.max(1, contactEl ? contactEl.offsetTop : hero.offsetHeight);
+    // measured against the Contact section instead of the hero's height, so
+    // the turn spans every section in between rather than only the hero.
+    //
+    // Capped at the furthest the page can actually scroll, which matters:
+    // Contact is the last section, so its top never climbs all the way to
+    // the nav — the document runs out first. Measuring against its offset
+    // alone leaves the last few percent of the revolution permanently
+    // unreachable, and the head visibly stops just short of home. Whichever
+    // comes first is the honest end of the page.
+    var maxScroll = Math.max(1, (document.documentElement.scrollHeight || 0) - window.innerHeight);
+    var mark = contactEl ? contactEl.offsetTop : hero.offsetHeight;
+    var total = Math.max(1, Math.min(mark, maxScroll));
     return clamp(window.scrollY / total, 0, 1);
   }
 

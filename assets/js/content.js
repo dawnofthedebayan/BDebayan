@@ -71,7 +71,7 @@ window.SITE = {
       "tier": 2,
       "name": "Mood classifier pipeline",
       "kicker": "Local inference · structured extraction",
-      "status": "Sunsette",
+      "status": "Sunsetted",
       "pitch": "A local reasoning model that turns free-text journal entries into a queryable database of emotional metadata.",
       "stack": [
         "DeepSeek-R1-0528-Qwen3-8B",
@@ -142,22 +142,6 @@ window.SITE = {
         "<code>asyncio</code> parallelism across chapters where ordering permits, with the sequential memory chain preserved."
       ],
       "next": "Mostly done and doing its job. I am considering making an obsidian plugin like Confidant."
-    }
-  ],
-  "notebook": [
-    {
-      "name": "Trading dashboard",
-      "note": "Positions, P&L and exposure in one Streamlit page. Unglamorous, used constantly."
-    },
-    {
-      "name": "Language learning app",
-      "note": "Spaced repetition with generated example sentences. Written up on the Substack.",
-      "href": "https://debayanbhattacharya.substack.com/p/made-an-ai-powered-language-learning"
-    },
-    {
-      "name": "DebayanGPT",
-      "note": "An early experiment in a model that talks like me. Mostly a lesson in how much data that actually takes.",
-      "href": "https://github.com/dawnofthedebayan/DebayanGPT"
     }
   ],
   "writing": {
@@ -401,8 +385,6 @@ window.SITE = {
     "headlineLead": "Hi I am ",
     "headlineAccent": "Dr. Debayan Bhattacharya"
   },
-  "notebookIntro": "Smaller and rougher. Built to answer a question or scratch an itch, kept because they still get used.",
-  "notebookTitle": "Lab notebook",
   "background": {
     "cell": 17,
     "fps": 9,
@@ -414,8 +396,6 @@ window.SITE = {
   },
   "curiosities": {
     "intro": "Ideas I keep turning over. Mostly things with a name, where the name turned out to be doing a lot of work.",
-    "pageTitle": "Things I keep thinking about",
-    "pageIntro": "A running collection of concepts I find interesting. ",
     "items": [
       {
         "id": "streisand-effect",
@@ -574,5 +554,23 @@ window.SITE = {
         "related": []
       }
     ]
+  },
+  "pages": {
+    "projects": {
+      "title": "The things I have built",
+      "intro": "Every project I have kept, with the problem each one was trying to solve. Most of them started as something I wanted for myself."
+    },
+    "writing": {
+      "title": "Just Build It",
+      "intro": "I write about what I am actually building — mostly personal AI and automation, occasionally what any of it means inside a large enterprise. The Building My Second Brain series is the long-running thread."
+    },
+    "curiosities": {
+      "title": "Things I keep thinking about",
+      "intro": "A running collection of concepts I find interesting. "
+    },
+    "offclock": {
+      "title": "Records, films, books and strong opinions about rice.",
+      "intro": "The stuff that has nothing to do with work, which is to say the stuff that quietly explains most of it."
+    }
   }
 };

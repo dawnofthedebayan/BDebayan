@@ -366,8 +366,8 @@
   // hero — is fair game. A blocklist is used rather than an allowlist so new
   // markup defaults to being clickable background, not to being inert.
   var BLOCK = 'a, button, input, textarea, select, label, iframe, ' +
-              '.nav, .pcard, .oc, .oc-drawer, .post, .rootnode, .notebook, ' +
-              '.series, .cs-blocks, .diagram, .life-hint, .oc-composer';
+              '.nav, .shelf, .shelf-drawer, .lib-tools, .lib-modal, .post, ' +
+              '.rootnode, .cs-blocks, .diagram, .life-hint';
   var TEXT = 'h1, h2, h3, h4, h5, p, li, code, em, strong, b, i, span, svg, img, figure, figcaption';
 
   function isBackdrop(el) {

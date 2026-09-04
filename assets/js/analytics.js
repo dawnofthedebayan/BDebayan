@@ -77,11 +77,13 @@
     var t = e.target;
     if (!t || !t.closest) return;
 
-    var proj = t.closest('.pcard');
-    if (proj && t.closest('.expand')) track('project-' + (proj.dataset.id || '?'));
-
-    var oc = t.closest('.oc-card');
-    if (oc) track('offclock-' + (oc.dataset.id || '?'));
+    /* Every section is a shelf now, so one rule covers all four — the card
+       that was opened, tagged with the collection it belongs to. */
+    var card = t.closest('.shelf-card, .lib-card');
+    if (card) {
+      var holder = card.closest('[data-collection]');
+      track((holder ? holder.dataset.collection : 'item') + '-' + (card.dataset.id || '?'));
+    }
 
     if (t.closest('[data-theme-toggle]')) {
       // read after the toggle has run

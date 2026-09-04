@@ -16,17 +16,17 @@
   document.documentElement.setAttribute('data-theme', t);
 })();
 </script>
-<title>Curiosities — Debayan Bhattacharya</title>
-<meta name="description" content="A running collection of concepts I keep thinking about, written out in my own words.">
+<title>Projects — Debayan Bhattacharya</title>
+<meta name="description" content="Everything I have built, with the problem each one was trying to solve.">
 <meta name="author" content="Debayan Bhattacharya">
 <meta name="theme-color" content="#0A0C16" data-theme-color>
 
 <meta property="og:type" content="website">
-<meta property="og:title" content="Curiosities — Debayan Bhattacharya">
-<meta property="og:description" content="A running collection of concepts I keep thinking about, written out in my own words.">
+<meta property="og:title" content="Projects — Debayan Bhattacharya">
+<meta property="og:description" content="Everything I have built, with the problem each one was trying to solve.">
 <meta property="og:image" content="https://www.bdebayan.com/assets/hero/gaze-poster.jpg">
-<meta property="og:url" content="https://www.bdebayan.com/curiosities.html">
-<link rel="canonical" href="https://www.bdebayan.com/curiosities.html">
+<meta property="og:url" content="https://www.bdebayan.com/projects.html">
+<link rel="canonical" href="https://www.bdebayan.com/projects.html">
 
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><circle cx='16' cy='16' r='7' fill='%2334E2C0'/><circle cx='16' cy='16' r='13' fill='none' stroke='%2334E2C0' stroke-opacity='.35'/></svg>">
 
@@ -48,9 +48,9 @@
   <!-- No data-nav here on purpose: this page is not the section list, so
        app.js leaves the links alone and they stay pointed at the home page. -->
   <nav class="nav-links" aria-label="Sections">
-    <a href="index.html#projects">projects</a>
+    <a href="projects.html" class="is-active">projects</a>
     <a href="index.html#writing">writing</a>
-    <a href="curiosities.html" class="is-active"><span class="lbl-full">curiosities</span><span class="lbl-short">curious</span></a>
+    <a href="index.html#curiosities"><span class="lbl-full">curiosities</span><span class="lbl-short">curious</span></a>
     <a href="index.html#offclock"><span class="lbl-full">off the clock</span><span class="lbl-short">off-clock</span></a>
     <a href="index.html#contact">contact</a>
 
@@ -65,7 +65,7 @@
 </header>
 
 <main class="page" id="top">
-<div class="lib" data-collection="curiosities">
+<div class="lib" data-collection="projects">
 
   <!-- ================================================================ HEAD -->
   <header class="lib-head">
@@ -73,9 +73,9 @@
       <a class="lib-back" href="index.html">
         <span aria-hidden="true">&#8592;</span> back to the site
       </a>
-      <div class="section-label">Curiosities</div>
-      <h1 data-bind="pages.curiosities.title"></h1>
-      <p data-bind="pages.curiosities.intro"></p>
+      <div class="section-label">Projects</div>
+      <h1 data-bind="pages.projects.title"></h1>
+      <p data-bind="pages.projects.intro"></p>
     </div>
   </header>
 
@@ -91,13 +91,13 @@
           <svg viewBox="0 0 24 24" aria-hidden="true">
             <circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5" stroke-linecap="round"/>
           </svg>
-          <input type="search" data-lib-search placeholder="Search the concepts…"
-                 aria-label="Search the concepts…" autocomplete="off" spellcheck="false">
+          <input type="search" data-lib-search placeholder="Search the projects…"
+                 aria-label="Search the projects…" autocomplete="off" spellcheck="false">
           <kbd>/</kbd>
         </div>
 
         <div class="lib-select">
-          <select data-lib-status aria-label="Filter by how settled a concept is"></select>
+          <select data-lib-status aria-label="Filter by what state a project is in"></select>
         </div>
 
         <div class="lib-select">
@@ -142,18 +142,18 @@
       <div class="lib-grid"></div>
       <div class="lib-graph"></div>
       <p class="lib-hint">
-        Each node is a concept; each line is one I think leans on the other. Bigger nodes are the better-connected ones. Hover to isolate a neighbourhood, click to open.
+        Each node is a project; a line means one leans on the other — shared code, or an idea that moved across. Bigger nodes are the better-connected ones. Hover to isolate a neighbourhood, click to open.
       </p>
 
       <div class="lib-empty" hidden>
-        <strong>Nothing here matches that.</strong><p>Try a shorter search, or drop a tag or two.</p>
+        <strong>Nothing here matches that.</strong><p>Try a shorter search, or drop a filter.</p>
       </div>
     </div>
   </div>
 
   <!-- =============================================================== MODAL -->
   <div class="lib-modal" role="dialog" aria-modal="true" aria-hidden="true"
-       aria-label="Curiosities detail">
+       aria-label="Projects detail">
     <div class="lib-scrim"></div>
     <div class="lib-modal-box">
       <div class="lib-modal-in"></div>
