@@ -23,6 +23,29 @@ window.SITE = {
   },
   "projects": [
     {
+      "id": "health-visualization",
+      "tier": 2,
+      "name": "Health Visualization",
+      "kicker": "Category · stack",
+      "status": "Shipped",
+      "statusKind": "shipped",
+      "stack": [],
+      "links": [],
+      "problem": "I just wanted to visualize the health data from Apple. Apple's own health visualizations is lacking in identifying macro patterns and wanted something better. ",
+      "built": [
+        "Simple HTML and JS that parses the health data zip , does aggregations and visualises the results."
+      ],
+      "next": "Nothing more is planned. Built it cause building is commoditized. ",
+      "pitch": "Claude made a dashboard to visualize my health export data from Apple",
+      "cta": [
+        {
+          "label": "Read more here",
+          "href": "https://debayanbhattacharya.substack.com/p/claude-whats-my-health-like"
+        }
+      ],
+      "image": "art/bildschirmfoto-2026-09-17-um-21.37.56.png"
+    },
+    {
       "id": "confidant",
       "tier": 1,
       "name": "Confidant",
